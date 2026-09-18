@@ -1,0 +1,1113 @@
+{
+  "as_of": "2024-03-30T18:06:00Z",
+  "cases": [
+    {
+      "id": "open",
+      "question": "How many tickets are currently open?",
+      "status": "success",
+      "tool": "aggregate_tickets",
+      "arguments": {
+        "spec": {
+          "selection": {
+            "where": [
+              {
+                "field": "status",
+                "op": "eq",
+                "value": "Open"
+              }
+            ]
+          }
+        }
+      },
+      "expected": {
+        "kind": "aggregate",
+        "summary": {
+          "metrics": {
+            "count": {
+              "value": 111,
+              "sample_count": 111
+            }
+          }
+        }
+      },
+      "official": true
+    },
+    {
+      "id": "resolved_month",
+      "question": "Which agent resolved the most tickets this month?",
+      "status": "success",
+      "tool": "aggregate_tickets",
+      "arguments": {
+        "spec": {
+          "selection": {
+            "where": [
+              {
+                "field": "status",
+                "op": "eq",
+                "value": "Resolved"
+              }
+            ],
+            "date_window": {
+              "field": "resolved_at_estimated",
+              "period": "this_month"
+            }
+          },
+          "group_by": [
+            "agent_id"
+          ],
+          "top_n": 1
+        }
+      },
+      "expected": {
+        "kind": "aggregate",
+        "rows": [
+          {
+            "agent_id": "AGT-01",
+            "count": 15
+          },
+          {
+            "agent_id": "AGT-12",
+            "count": 15
+          }
+        ]
+      },
+      "official": true
+    },
+    {
+      "id": "critical_target",
+      "question": "Show Critical tickets not resolved within 12 hours.",
+      "status": "success",
+      "tool": "check_time_target",
+      "arguments": {
+        "spec": {
+          "selection": {
+            "where": [
+              {
+                "field": "priority",
+                "op": "eq",
+                "value": "Critical"
+              }
+            ]
+          },
+          "target": "resolution",
+          "threshold_hours": 12
+        }
+      },
+      "expected": {
+        "kind": "time_target",
+        "summary": {
+          "breach_count": 34,
+          "states": {
+            "completed_late": 3,
+            "pending_overdue": 31
+          }
+        }
+      },
+      "official": true
+    },
+    {
+      "id": "technical_rating",
+      "question": "What is the average customer rating for Technical tickets?",
+      "status": "success",
+      "tool": "aggregate_tickets",
+      "arguments": {
+        "spec": {
+          "selection": {
+            "where": [
+              {
+                "field": "category",
+                "op": "eq",
+                "value": "Technical"
+              }
+            ]
+          },
+          "metrics": [
+            {
+              "operation": "average",
+              "field": "customer_rating"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "aggregate",
+        "summary": {
+          "metrics": {
+            "average_customer_rating": {
+              "value": 3.7403846153846154,
+              "sample_count": 104
+            }
+          }
+        }
+      },
+      "official": true
+    },
+    {
+      "id": "weekly_anomalies",
+      "question": "Were there resolution-time anomalies this week?",
+      "status": "success",
+      "tool": "detect_anomalies",
+      "arguments": {
+        "spec": {
+          "rule": "long_resolution",
+          "selection": {
+            "date_window": {
+              "field": "resolved_at_estimated",
+              "period": "this_week"
+            }
+          }
+        }
+      },
+      "expected": {
+        "kind": "anomalies",
+        "summary": {
+          "long_resolution_count": 3
+        }
+      },
+      "official": true
+    },
+    {
+      "id": "total",
+      "question": "How many tickets are in the dataset?",
+      "status": "success",
+      "tool": "aggregate_tickets",
+      "arguments": {
+        "spec": {}
+      },
+      "expected": {
+        "kind": "aggregate",
+        "summary": {
+          "metrics": {
+            "count": {
+              "value": 500
+            }
+          }
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "unresolved",
+      "question": "Count tickets that are Open or Escalated.",
+      "status": "success",
+      "tool": "aggregate_tickets",
+      "arguments": {
+        "spec": {
+          "selection": {
+            "where": [
+              {
+                "field": "status",
+                "op": "in",
+                "value": [
+                  "Open",
+                  "Escalated"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "expected": {
+        "kind": "aggregate",
+        "summary": {
+          "metrics": {
+            "count": {
+              "value": 173
+            }
+          }
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "critical_unresolved",
+      "question": "How many Critical tickets remain unresolved?",
+      "status": "success",
+      "tool": "aggregate_tickets",
+      "arguments": {
+        "spec": {
+          "selection": {
+            "where": [
+              {
+                "field": "priority",
+                "op": "eq",
+                "value": "Critical"
+              },
+              {
+                "field": "status",
+                "op": "in",
+                "value": [
+                  "Open",
+                  "Escalated"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "expected": {
+        "kind": "aggregate",
+        "summary": {
+          "metrics": {
+            "count": {
+              "value": 31
+            }
+          }
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "resolved",
+      "question": "How many tickets have recorded status Resolved?",
+      "status": "success",
+      "tool": "aggregate_tickets",
+      "arguments": {
+        "spec": {
+          "selection": {
+            "where": [
+              {
+                "field": "status",
+                "op": "eq",
+                "value": "Resolved"
+              }
+            ]
+          }
+        }
+      },
+      "expected": {
+        "kind": "aggregate",
+        "summary": {
+          "metrics": {
+            "count": {
+              "value": 327
+            }
+          }
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "escalated",
+      "question": "Count escalated support requests.",
+      "status": "success",
+      "tool": "aggregate_tickets",
+      "arguments": {
+        "spec": {
+          "selection": {
+            "where": [
+              {
+                "field": "status",
+                "op": "eq",
+                "value": "Escalated"
+              }
+            ]
+          }
+        }
+      },
+      "expected": {
+        "kind": "aggregate",
+        "summary": {
+          "metrics": {
+            "count": {
+              "value": 62
+            }
+          }
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "categories",
+      "question": "Break down ticket counts by category.",
+      "status": "success",
+      "tool": "aggregate_tickets",
+      "arguments": {
+        "spec": {
+          "group_by": [
+            "category"
+          ]
+        }
+      },
+      "expected": {
+        "kind": "aggregate",
+        "rows": [
+          {
+            "category": "General",
+            "count": 189
+          },
+          {
+            "category": "Billing",
+            "count": 159
+          },
+          {
+            "category": "Technical",
+            "count": 152
+          }
+        ]
+      },
+      "official": false
+    },
+    {
+      "id": "lowest_rating",
+      "question": "Which agent has the lowest average customer rating?",
+      "status": "success",
+      "tool": "aggregate_tickets",
+      "arguments": {
+        "spec": {
+          "group_by": [
+            "agent_id"
+          ],
+          "metrics": [
+            {
+              "operation": "average",
+              "field": "customer_rating"
+            }
+          ],
+          "descending": false,
+          "top_n": 1
+        }
+      },
+      "expected": {
+        "kind": "aggregate",
+        "rows": [
+          {
+            "agent_id": "AGT-08",
+            "average_customer_rating": 3.48,
+            "average_customer_rating_sample_count": 25
+          }
+        ]
+      },
+      "official": false
+    },
+    {
+      "id": "distinct_agents",
+      "question": "How many distinct agents are assigned tickets?",
+      "status": "success",
+      "tool": "aggregate_tickets",
+      "arguments": {
+        "spec": {
+          "metrics": [
+            {
+              "operation": "distinct_count",
+              "field": "agent_id"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "aggregate",
+        "summary": {
+          "metrics": {
+            "distinct_count_agent_id": {
+              "value": 12
+            }
+          }
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "median_resolution",
+      "question": "What is the median resolution duration for resolved tickets?",
+      "status": "success",
+      "tool": "aggregate_tickets",
+      "arguments": {
+        "spec": {
+          "selection": {
+            "where": [
+              {
+                "field": "status",
+                "op": "eq",
+                "value": "Resolved"
+              }
+            ]
+          },
+          "metrics": [
+            {
+              "operation": "median",
+              "field": "resolution_time_hrs"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "aggregate",
+        "summary": {
+          "metrics": {
+            "median_resolution_time_hrs": {
+              "value": 12,
+              "sample_count": 327
+            }
+          }
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "p90_resolution",
+      "question": "What is the 90th percentile of resolution hours among resolved tickets?",
+      "status": "success",
+      "tool": "aggregate_tickets",
+      "arguments": {
+        "spec": {
+          "selection": {
+            "where": [
+              {
+                "field": "status",
+                "op": "eq",
+                "value": "Resolved"
+              }
+            ]
+          },
+          "metrics": [
+            {
+              "operation": "percentile",
+              "field": "resolution_time_hrs",
+              "percentile": 90
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "aggregate",
+        "summary": {
+          "metrics": {
+            "percentile_resolution_time_hrs_90.0": {
+              "value": 43.18,
+              "sample_count": 327
+            }
+          }
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "sum_response",
+      "question": "Sum all measured first-response durations.",
+      "status": "success",
+      "tool": "aggregate_tickets",
+      "arguments": {
+        "spec": {
+          "metrics": [
+            {
+              "operation": "sum",
+              "field": "response_time_hrs"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "aggregate",
+        "summary": {
+          "metrics": {
+            "sum_response_time_hrs": {
+              "value": 1310.3,
+              "sample_count": 500
+            }
+          }
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "max_resolution",
+      "question": "What is the longest measured resolution duration?",
+      "status": "success",
+      "tool": "aggregate_tickets",
+      "arguments": {
+        "spec": {
+          "metrics": [
+            {
+              "operation": "max",
+              "field": "resolution_time_hrs"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "aggregate",
+        "summary": {
+          "metrics": {
+            "max_resolution_time_hrs": {
+              "value": 119.7,
+              "sample_count": 327
+            }
+          }
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "overview",
+      "question": "Describe the dataset's size and date coverage.",
+      "status": "success",
+      "tool": "get_dataset_info",
+      "arguments": {
+        "spec": {
+          "section": "overview"
+        }
+      },
+      "expected": {
+        "kind": "dataset_info",
+        "summary": {
+          "total_tickets": 500
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "schema",
+      "question": "Which fields, statuses, priorities, and agent identifiers are available?",
+      "status": "success",
+      "tool": "get_dataset_info",
+      "arguments": {
+        "spec": {
+          "section": "schema"
+        }
+      },
+      "expected": {
+        "kind": "dataset_info",
+        "summary": {
+          "allowed_values": {
+            "status": [
+              "Open",
+              "Resolved",
+              "Escalated"
+            ]
+          }
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "definitions",
+      "question": "Explain what unresolved and estimated resolution time mean.",
+      "status": "success",
+      "tool": "get_dataset_info",
+      "arguments": {
+        "spec": {
+          "section": "definitions"
+        }
+      },
+      "expected": {
+        "kind": "dataset_info",
+        "summary": {
+          "unresolved": "status is Open or Escalated; Open alone excludes Escalated"
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "quality",
+      "question": "Are there business inconsistencies or missing measurements?",
+      "status": "success",
+      "tool": "get_data_quality_report",
+      "arguments": {
+        "spec": {}
+      },
+      "expected": {
+        "kind": "quality",
+        "summary": {
+          "resolution_before_response": 28,
+          "status_conflicts": 0
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "timing_quality",
+      "question": "Find tickets whose resolution duration is shorter than their first-response duration.",
+      "status": "success",
+      "tool": "get_data_quality_report",
+      "arguments": {
+        "spec": {
+          "warning_type": "resolution_before_response"
+        }
+      },
+      "expected": {
+        "kind": "quality",
+        "summary": {
+          "resolution_before_response": 28
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "missing_values",
+      "question": "How many customer ratings and resolution durations are missing?",
+      "status": "success",
+      "tool": "get_data_quality_report",
+      "arguments": {
+        "spec": {
+          "warning_type": "missing_values"
+        }
+      },
+      "expected": {
+        "kind": "quality",
+        "summary": {
+          "missing_values": {
+            "customer_rating": 173,
+            "resolution_time_hrs": 173,
+            "response_time_hrs": 0
+          }
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "refund",
+      "question": "Find tickets mentioning refunds; search for the literal text refund.",
+      "status": "success",
+      "tool": "list_tickets",
+      "arguments": {
+        "spec": {
+          "search": "refund"
+        }
+      },
+      "expected": {
+        "kind": "tickets",
+        "summary": {
+          "matched_tickets": 20
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "ticket_id",
+      "question": "Show ticket TKT-001.",
+      "status": "success",
+      "tool": "list_tickets",
+      "arguments": {
+        "spec": {
+          "selection": {
+            "where": [
+              {
+                "field": "ticket_id",
+                "op": "eq",
+                "value": "TKT-001"
+              }
+            ]
+          }
+        }
+      },
+      "expected": {
+        "kind": "tickets",
+        "summary": {
+          "matched_tickets": 1
+        },
+        "rows": [
+          {
+            "ticket_id": "TKT-001"
+          }
+        ]
+      },
+      "official": false
+    },
+    {
+      "id": "missing_id",
+      "question": "Find ticket TKT-999999.",
+      "status": "success",
+      "tool": "list_tickets",
+      "arguments": {
+        "spec": {
+          "selection": {
+            "where": [
+              {
+                "field": "ticket_id",
+                "op": "eq",
+                "value": "TKT-999999"
+              }
+            ]
+          }
+        }
+      },
+      "expected": {
+        "kind": "tickets",
+        "summary": {
+          "matched_tickets": 0
+        },
+        "rows": []
+      },
+      "official": false
+    },
+    {
+      "id": "billing_refunds",
+      "question": "List unresolved Billing tickets mentioning refund.",
+      "status": "success",
+      "tool": "list_tickets",
+      "arguments": {
+        "spec": {
+          "selection": {
+            "where": [
+              {
+                "field": "category",
+                "op": "eq",
+                "value": "Billing"
+              },
+              {
+                "field": "status",
+                "op": "in",
+                "value": [
+                  "Open",
+                  "Escalated"
+                ]
+              }
+            ]
+          },
+          "search": "refund"
+        }
+      },
+      "expected": {
+        "kind": "tickets",
+        "summary": {
+          "matched_tickets": 9
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "critical_rate",
+      "question": "What percentage of Critical tickets are unresolved?",
+      "status": "success",
+      "tool": "calculate_ticket_rate",
+      "arguments": {
+        "spec": {
+          "base": {
+            "where": [
+              {
+                "field": "priority",
+                "op": "eq",
+                "value": "Critical"
+              }
+            ]
+          },
+          "matching": {
+            "where": [
+              {
+                "field": "status",
+                "op": "in",
+                "value": [
+                  "Open",
+                  "Escalated"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "expected": {
+        "kind": "rate",
+        "summary": {
+          "numerator": 31,
+          "denominator": 55,
+          "percentage": 56.36363636363636
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "resolution_rate",
+      "question": "What percentage of all tickets are Resolved?",
+      "status": "success",
+      "tool": "calculate_ticket_rate",
+      "arguments": {
+        "spec": {
+          "matching": {
+            "where": [
+              {
+                "field": "status",
+                "op": "eq",
+                "value": "Resolved"
+              }
+            ]
+          }
+        }
+      },
+      "expected": {
+        "kind": "rate",
+        "summary": {
+          "numerator": 327,
+          "denominator": 500,
+          "percentage": 65.4
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "escalation_rate",
+      "question": "Calculate the escalation percentage across all tickets.",
+      "status": "success",
+      "tool": "calculate_ticket_rate",
+      "arguments": {
+        "spec": {
+          "matching": {
+            "where": [
+              {
+                "field": "status",
+                "op": "eq",
+                "value": "Escalated"
+              }
+            ]
+          }
+        }
+      },
+      "expected": {
+        "kind": "rate",
+        "summary": {
+          "numerator": 62,
+          "denominator": 500,
+          "percentage": 12.4
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "weekly_volume",
+      "question": "Chart ticket creation volume by week across the dataset.",
+      "status": "success",
+      "tool": "get_ticket_trends",
+      "arguments": {
+        "spec": {
+          "interval": "week"
+        }
+      },
+      "expected": {
+        "kind": "trend",
+        "summary": {
+          "matched_tickets": 500,
+          "total_buckets": 13,
+          "interval": "week"
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "monthly_response",
+      "question": "Show mean first-response hours by creation month.",
+      "status": "success",
+      "tool": "get_ticket_trends",
+      "arguments": {
+        "spec": {
+          "interval": "month",
+          "metric": {
+            "operation": "average",
+            "field": "response_time_hrs"
+          }
+        }
+      },
+      "expected": {
+        "kind": "trend",
+        "summary": {
+          "total_buckets": 3
+        },
+        "rows": [
+          {
+            "value": 2.6787878787878787
+          },
+          {
+            "value": 2.4401360544217687
+          },
+          {
+            "value": 2.7106382978723405
+          }
+        ]
+      },
+      "official": false
+    },
+    {
+      "id": "open_week",
+      "question": "Group currently recorded Open tickets by creation week.",
+      "status": "success",
+      "tool": "get_ticket_trends",
+      "arguments": {
+        "spec": {
+          "selection": {
+            "where": [
+              {
+                "field": "status",
+                "op": "eq",
+                "value": "Open"
+              }
+            ]
+          },
+          "interval": "week"
+        }
+      },
+      "expected": {
+        "kind": "trend",
+        "summary": {
+          "matched_tickets": 111,
+          "total_buckets": 13
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "category_compare",
+      "question": "Compare average resolution time for Billing as baseline and Technical as comparison.",
+      "status": "success",
+      "tool": "compare_ticket_metrics",
+      "arguments": {
+        "spec": {
+          "baseline": {
+            "name": "Billing",
+            "selection": {
+              "where": [
+                {
+                  "field": "category",
+                  "op": "eq",
+                  "value": "Billing"
+                }
+              ]
+            }
+          },
+          "comparison": {
+            "name": "Technical",
+            "selection": {
+              "where": [
+                {
+                  "field": "category",
+                  "op": "eq",
+                  "value": "Technical"
+                }
+              ]
+            }
+          },
+          "metrics": [
+            {
+              "operation": "average",
+              "field": "resolution_time_hrs"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "kind": "comparison",
+        "rows": [
+          {
+            "metric": "average_resolution_time_hrs",
+            "baseline": 16.334653465346534,
+            "comparison": 20.58653846153846,
+            "baseline_sample_count": 101,
+            "comparison_sample_count": 104
+          }
+        ]
+      },
+      "official": false
+    },
+    {
+      "id": "count_compare",
+      "question": "Compare Open ticket count as baseline against Resolved ticket count.",
+      "status": "success",
+      "tool": "compare_ticket_metrics",
+      "arguments": {
+        "spec": {
+          "baseline": {
+            "name": "Open",
+            "selection": {
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "Open"
+                }
+              ]
+            }
+          },
+          "comparison": {
+            "name": "Resolved",
+            "selection": {
+              "where": [
+                {
+                  "field": "status",
+                  "op": "eq",
+                  "value": "Resolved"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "expected": {
+        "kind": "comparison",
+        "rows": [
+          {
+            "metric": "count",
+            "baseline": 111,
+            "comparison": 327,
+            "absolute_difference": 216
+          }
+        ]
+      },
+      "official": false
+    },
+    {
+      "id": "response_target",
+      "question": "Show first-response measurements strictly above four hours.",
+      "status": "success",
+      "tool": "check_time_target",
+      "arguments": {
+        "spec": {
+          "target": "first_response",
+          "threshold_hours": 4
+        }
+      },
+      "expected": {
+        "kind": "time_target",
+        "summary": {
+          "breach_count": 109
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "overdue",
+      "question": "Find unresolved High or Critical tickets older than 24 hours.",
+      "status": "success",
+      "tool": "detect_anomalies",
+      "arguments": {
+        "spec": {
+          "rule": "overdue_high_priority"
+        }
+      },
+      "expected": {
+        "kind": "anomalies",
+        "summary": {
+          "overdue_high_priority_count": 80
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "long_resolution",
+      "question": "Find unusually long resolution durations using the global IQR rule.",
+      "status": "success",
+      "tool": "detect_anomalies",
+      "arguments": {
+        "spec": {
+          "rule": "long_resolution"
+        }
+      },
+      "expected": {
+        "kind": "anomalies",
+        "summary": {
+          "long_resolution_count": 21
+        }
+      },
+      "official": false
+    },
+    {
+      "id": "ambiguous_best",
+      "question": "Who is the best agent?",
+      "status": "clarification",
+      "official": false
+    },
+    {
+      "id": "unsupported_email",
+      "question": "Email every customer a refund confirmation.",
+      "status": "unsupported",
+      "official": false
+    }
+  ]
+}

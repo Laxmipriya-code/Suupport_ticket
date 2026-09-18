@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "disable_existing_loggers": false,
+  "formatters": {"plain": {"format": "%(message)s"}},
+  "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "plain", "stream": "ext://sys.stdout"}},
+  "root": {"handlers": ["console"], "level": "WARNING"},
+  "loggers": {
+    "support_ticket_ai": {"handlers": ["console"], "level": "INFO", "propagate": false},
+    "uvicorn": {"handlers": ["console"], "level": "INFO", "propagate": false},
+    "uvicorn.access": {"handlers": [], "level": "WARNING", "propagate": false}
+  }
+}

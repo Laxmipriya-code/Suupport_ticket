@@ -1,0 +1,217 @@
+{
+  "mode": "live",
+  "model": "openai/gpt-oss-20b",
+  "as_of": "2024-03-30T18:06:00Z",
+  "dataset_fingerprint": "812984803c7e806803269aaf00da76b1adf21c6165ce58f86fd1bef20bb5ebff",
+  "data_timezone": "UTC",
+  "evaluation_fingerprint": "b38eef2693b3332e0fc33ec58de7c2d585475e6b1bff90eb3a62a7198d7332af",
+  "total": 19,
+  "planned": 40,
+  "completed": 12,
+  "quota_blocked": 7,
+  "passed": 12,
+  "accuracy": 0.631578947368421,
+  "first_attempt_passed": 12,
+  "full_suite": false,
+  "acceptance_met": false,
+  "state": "quota_blocked",
+  "cases": [
+    {
+      "id": "open",
+      "official": true,
+      "passed": true,
+      "status": "success",
+      "tools": [
+        "aggregate_tickets"
+      ],
+      "model_turns": 2,
+      "tool_calls": 1
+    },
+    {
+      "id": "resolved_month",
+      "official": true,
+      "passed": true,
+      "status": "success",
+      "tools": [
+        "aggregate_tickets"
+      ],
+      "model_turns": 2,
+      "tool_calls": 1
+    },
+    {
+      "id": "critical_target",
+      "official": true,
+      "passed": true,
+      "status": "success",
+      "tools": [
+        "check_time_target"
+      ],
+      "model_turns": 2,
+      "tool_calls": 1
+    },
+    {
+      "id": "technical_rating",
+      "official": true,
+      "passed": true,
+      "status": "success",
+      "tools": [
+        "aggregate_tickets"
+      ],
+      "model_turns": 2,
+      "tool_calls": 1
+    },
+    {
+      "id": "weekly_anomalies",
+      "official": true,
+      "passed": true,
+      "status": "success",
+      "tools": [
+        "detect_anomalies"
+      ],
+      "model_turns": 2,
+      "tool_calls": 1
+    },
+    {
+      "id": "total",
+      "official": false,
+      "passed": true,
+      "status": "success",
+      "tools": [
+        "aggregate_tickets"
+      ],
+      "model_turns": 2,
+      "tool_calls": 1
+    },
+    {
+      "id": "unresolved",
+      "official": false,
+      "passed": true,
+      "status": "success",
+      "tools": [
+        "aggregate_tickets"
+      ],
+      "model_turns": 2,
+      "tool_calls": 1
+    },
+    {
+      "id": "critical_unresolved",
+      "official": false,
+      "passed": true,
+      "status": "success",
+      "tools": [
+        "aggregate_tickets"
+      ],
+      "model_turns": 2,
+      "tool_calls": 1
+    },
+    {
+      "id": "resolved",
+      "official": false,
+      "passed": true,
+      "status": "success",
+      "tools": [
+        "aggregate_tickets"
+      ],
+      "model_turns": 2,
+      "tool_calls": 1
+    },
+    {
+      "id": "escalated",
+      "official": false,
+      "passed": true,
+      "status": "success",
+      "tools": [
+        "aggregate_tickets"
+      ],
+      "model_turns": 2,
+      "tool_calls": 1
+    },
+    {
+      "id": "categories",
+      "official": false,
+      "passed": true,
+      "status": "success",
+      "tools": [
+        "aggregate_tickets"
+      ],
+      "model_turns": 2,
+      "tool_calls": 1
+    },
+    {
+      "id": "lowest_rating",
+      "official": false,
+      "passed": true,
+      "status": "success",
+      "tools": [
+        "aggregate_tickets",
+        "aggregate_tickets"
+      ],
+      "model_turns": 3,
+      "tool_calls": 2
+    },
+    {
+      "id": "distinct_agents",
+      "official": false,
+      "passed": false,
+      "error": "groq_rate_limit",
+      "retry_after": "59",
+      "model_turns": 2,
+      "tool_calls": 1
+    },
+    {
+      "id": "median_resolution",
+      "official": false,
+      "passed": false,
+      "error": "groq_rate_limit",
+      "retry_after": "903",
+      "model_turns": 2,
+      "tool_calls": 1
+    },
+    {
+      "id": "p90_resolution",
+      "official": false,
+      "passed": false,
+      "error": "groq_rate_limit",
+      "retry_after": "698",
+      "model_turns": 1,
+      "tool_calls": 0
+    },
+    {
+      "id": "sum_response",
+      "official": false,
+      "passed": false,
+      "error": "groq_rate_limit",
+      "retry_after": "697",
+      "model_turns": 1,
+      "tool_calls": 0
+    },
+    {
+      "id": "max_resolution",
+      "official": false,
+      "passed": false,
+      "error": "groq_rate_limit",
+      "retry_after": "671",
+      "model_turns": 1,
+      "tool_calls": 0
+    },
+    {
+      "id": "overview",
+      "official": false,
+      "passed": false,
+      "error": "groq_rate_limit",
+      "retry_after": "607",
+      "model_turns": 1,
+      "tool_calls": 0
+    },
+    {
+      "id": "schema",
+      "official": false,
+      "passed": false,
+      "error": "groq_rate_limit",
+      "retry_after": "564",
+      "model_turns": 1,
+      "tool_calls": 0
+    }
+  ],
+  "verification_note": "Resume metadata was added after the quota-blocked run. Agent, calculation code, fixtures, and recorded outcomes are unchanged."
+}
