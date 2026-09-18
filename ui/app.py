@@ -10,7 +10,20 @@ import streamlit as st
 
 API_URL = os.getenv("API_BASE_URL", "http://127.0.0.1:8000").rstrip("/")
 st.set_page_config(page_title="Support Ticket AI", page_icon="🎫", layout="wide")
-st.html("<style>[data-testid='stAppDeployButton'] {display: none;}</style>")
+st.html(
+    """
+    <style>
+    #MainMenu,
+    footer,
+    header,
+    [data-testid="stToolbar"],
+    [data-testid="stAppDeployButton"] {
+        display: none;
+        visibility: hidden;
+    }
+    </style>
+    """
+)
 
 
 def api(method: str, path: str, **kwargs: Any) -> dict[str, Any] | None:
